@@ -1,6 +1,7 @@
 import ScreenCaptureKit
+import Combine
 
-class ScreenRecorder: NSObject, SCStreamDelegate, SCStreamOutput {
+class ScreenRecorder: NSObject, SCStreamDelegate, SCStreamOutput, ObservableObject {
     
     // MARK: - Respond to Errors
     
@@ -36,6 +37,10 @@ class ScreenRecorder: NSObject, SCStreamDelegate, SCStreamOutput {
     }
     
     private func startRecording(_ display: SCDisplay) {
+        DispatchQueue.main.async {
+            self.isRecording = true
+        }
+        
         videoFileWriter = VideoFileWriter()
         videoFileWriter?.restart()
         
@@ -47,7 +52,13 @@ class ScreenRecorder: NSObject, SCStreamDelegate, SCStreamOutput {
         
         videoFileWriter?.stop()
         videoFileWriter = nil
+        
+        DispatchQueue.main.async {
+            self.isRecording = false
+        }
     }
+    
+    @Published var isRecording = false
     
     // MARK: - Write Streamed Samples to Video File
     

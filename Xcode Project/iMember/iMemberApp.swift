@@ -6,15 +6,23 @@ struct iMemberApp: App {
         
         /// https://developer.apple.com/documentation/swiftui/menubarextra
         MenuBarExtra("iMember", systemImage: "brain") {
-            Button("Record Main Display") {
-                Self.recorder.startRecordingFirstDisplay()
-            }
-            
-            Button("Stop Recording") {
-                Self.recorder.stopRecording()
+            VStack {
+                Button("Record Main Display") {
+                    recorder.startRecordingFirstDisplay()
+                }.disabled(recorder.isRecording)
+                
+                Button("Stop Recording") {
+                    recorder.stopRecording()
+                }.disabled(!recorder.isRecording)
+                
+                Divider()
+                
+                Button("Quit iMember") {
+                    NSApplication.shared.terminate(nil)
+                }.disabled(recorder.isRecording)
             }
         }
     }
     
-    static let recorder = ScreenRecorder()
+    @StateObject var recorder = ScreenRecorder()
 }
