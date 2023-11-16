@@ -1,2 +1,2 @@
 # iMember
-Record Your Screen Discretely
+Open-source screen recorder as a menubar app.
